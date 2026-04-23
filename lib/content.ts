@@ -62,27 +62,29 @@ export const MEMORIES = [
 
 export const REASONS = [
   "ur laugh",
-  "the way u say my name",
-  "chungi energy",
-  "aishu mode",
-  "how u exist",
-  "ur brain",
-  "ur voice on calls",
-  "silly pics together",
-  "that one look",
-  "unreasonably cute",
-  "u make boring days soft",
-  "songs sound better w/ u",
-  "ur hands",
-  "our long calls",
+  "ur smile",
+  "ur eyes",
+  "ur nose",
+  "ur neck",
+  "ur soft side",
   "u remember everything",
-  "u fight for us",
-  "u forgive me",
-  "u choose me daily",
-  "u inspire me",
+  "the way u stand up for me",
+  "the way u believe in me",
   "u r home",
-  "n 21 more next yr",
+  "u choose me daily",
+  "our long calls",
+  "bava biriyani + eating out together",
+  "spending time together",
+  "movie dates",
+  "unreasonably cute",
+  "sexy all the time",
+  "ur business mind",
+  "ur passion",
+  "ur drive",
+  "the way u motivate me",
 ];
+
+export const REASONS_CLOSER = "i love you, chungi.";
 
 export const LETTER = `Krishnaa.
 

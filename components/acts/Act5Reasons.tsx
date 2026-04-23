@@ -2,7 +2,7 @@
 
 import { motion, useScroll, useTransform } from "motion/react";
 import { useRef } from "react";
-import { REASONS } from "@/lib/content";
+import { REASONS, REASONS_CLOSER } from "@/lib/content";
 
 const HUES = ["#ff8ea0", "#c9a16d", "#3d8b5a", "#8b6ec9", "#d9a5b3", "#6d8bc9", "#c96d9d", "#6dc9b0", "#e8b86d"];
 
@@ -50,8 +50,11 @@ export function Act5Reasons() {
           ))}
         </motion.div>
 
-        <p className="mt-16 px-6 md:px-16 text-sm text-[#7a4a2a] max-w-md">
-          (this list is nowhere near complete. but we're pacing ourselves.)
+        <p className="mt-16 px-6 md:px-16 font-[var(--font-caveat)] text-4xl md:text-6xl text-[#c84d6d] leading-none">
+          {REASONS_CLOSER}
+        </p>
+        <p className="mt-3 px-6 md:px-16 text-sm text-[#7a4a2a] max-w-md">
+          (list nowhere near complete. pacing ourselves.)
         </p>
       </div>
     </section>
