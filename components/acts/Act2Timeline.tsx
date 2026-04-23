@@ -318,14 +318,14 @@ function RollingGallery({
           </div>
         </div>
 
-        {/* rolling strip */}
+        {/* polaroid strip */}
         <div
           ref={scrollRef}
-          className="flex-1 flex items-center gap-6 overflow-x-auto overflow-y-hidden snap-x snap-mandatory px-[10vw] pb-12 no-scrollbar scroll-smooth"
+          className="flex-1 flex items-center gap-5 md:gap-7 overflow-x-auto overflow-y-hidden snap-x snap-mandatory px-[40vw] md:px-[42vw] pb-12 no-scrollbar scroll-smooth"
           style={{ WebkitOverflowScrolling: "touch" }}
         >
           {items.map((it, i) => (
-            <RollItem key={it.id} it={it} focused={i === idx} />
+            <PolaroidItem key={it.id} it={it} focused={i === idx} index={i} />
           ))}
         </div>
 
@@ -338,46 +338,96 @@ function RollingGallery({
   );
 }
 
-function RollItem({ it, focused }: { it: GalleryItem; focused: boolean }) {
+// Deterministic jitter so rotations stay stable across renders.
+function jitter(seed: string, range: number) {
+  let h = 0;
+  for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) | 0;
+  const r = (Math.abs(h) % 1000) / 1000;
+  return (r - 0.5) * 2 * range;
+}
+
+function PolaroidItem({
+  it,
+  focused,
+  index,
+}: {
+  it: GalleryItem;
+  focused: boolean;
+  index: number;
+}) {
+  const rot = jitter(it.id, 3.5);
+  const caption =
+    it.label.replace(/\s*\d{3,}\s*$/, "").slice(0, 40) ||
+    new Date(it.date).toLocaleDateString("en-US", { month: "short", year: "numeric" });
+
   return (
     <motion.div
+      initial={{ opacity: 0, y: 20 }}
       animate={{
-        scale: focused ? 1 : 0.82,
-        opacity: focused ? 1 : 0.45,
+        opacity: focused ? 1 : 0.55,
+        scale: focused ? 1.08 : 0.88,
+        rotate: focused ? 0 : rot,
+        y: focused ? -8 : 0,
       }}
-      transition={{ duration: 0.6, ease: [0.32, 0.72, 0, 1] }}
-      className="shrink-0 snap-center w-[80vw] md:w-[55vw] lg:w-[45vw] aspect-[3/4] rounded-[2rem] p-1.5 bg-white/5 hair-dark relative"
+      transition={{
+        duration: 0.55,
+        delay: Math.min(index * 0.015, 0.2),
+        ease: [0.32, 0.72, 0, 1],
+      }}
+      className="shrink-0 snap-center w-[62vw] sm:w-[44vw] md:w-[30vw] lg:w-[22vw] max-w-[340px] rounded-[4px] bg-[#f8f5ec] p-3 pb-16 shadow-[0_20px_50px_-12px_rgba(0,0,0,0.7)] relative font-[var(--font-caveat)]"
+      style={{ transformOrigin: "center 70%" }}
     >
-      <div className="relative w-full h-full rounded-[calc(2rem-0.375rem)] overflow-hidden bezel-inner bg-black">
+      {/* tape corners */}
+      <span
+        className="absolute -top-2 left-6 w-10 h-4 bg-white/40 backdrop-blur-sm rounded-[1px] shadow-sm"
+        style={{ transform: "rotate(-4deg)" }}
+      />
+      <span
+        className="absolute -top-2 right-6 w-10 h-4 bg-white/40 backdrop-blur-sm rounded-[1px] shadow-sm"
+        style={{ transform: "rotate(6deg)" }}
+      />
+
+      <div className="relative w-full aspect-square rounded-[2px] overflow-hidden bg-black">
         {it.kind === "image" ? (
           <Image
-            src={it.src}
+            src={it.thumb}
             alt={it.label}
             fill
             className="object-cover"
-            sizes="(max-width: 768px) 80vw, 45vw"
-            unoptimized
+            sizes="(max-width: 640px) 62vw, (max-width: 768px) 44vw, (max-width: 1024px) 30vw, 22vw"
           />
         ) : (
-          <video
-            src={it.src}
-            poster={it.thumb}
-            autoPlay={focused}
-            muted
-            loop
-            playsInline
-            controls={focused}
-            className="w-full h-full object-cover"
-          />
+          <>
+            <video
+              src={it.src}
+              poster={it.thumb}
+              autoPlay={focused}
+              muted
+              loop
+              playsInline
+              preload="metadata"
+              className="w-full h-full object-cover"
+            />
+            <span className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-rose/90 text-black text-[8px] uppercase tracking-[0.25em] font-mono">
+              ▸ reel
+            </span>
+          </>
         )}
-        <div className="absolute top-4 left-4 inline-flex items-center gap-2 px-3 py-1 rounded-full bg-black/50 backdrop-blur-md hair-dark text-[9px] font-mono uppercase tracking-[0.25em] text-white/80">
+      </div>
+
+      {/* handwritten caption in polaroid bottom band */}
+      <div className="absolute left-0 right-0 bottom-3 px-4 text-center">
+        <p className="text-[#2a2218] text-xl md:text-2xl leading-tight truncate">
+          {caption}
+        </p>
+        <p className="mt-0.5 text-[#7a6a4a] text-[10px] uppercase tracking-[0.2em] font-mono">
           {new Date(it.date).toLocaleDateString("en-US", {
             day: "numeric",
             month: "short",
-            year: "numeric",
+            year: "2-digit",
           })}
-          {it.place && <span className="text-rose">· {it.place}</span>}
-        </div>
+          {it.place && ` · ${it.place}`}
+        </p>
       </div>
     </motion.div>
   );

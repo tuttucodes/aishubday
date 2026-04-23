@@ -86,16 +86,23 @@ export const REASONS = [
 
 export const LETTER = `Krishnaa.
 
-If u scroll far enough u'll find every version of how i feel,
-scattered across this page like small lights.
+we met in the first week of college
+and i didn't know yet — but the draft
+of every good thing i have started there.
+
+if u scroll far enough u'll find every
+version of how i feel, scattered across
+this page like small lights.
 
 i built this because a card felt too small.
 because a text felt too flat.
-because tomorrow is ur day and i wanted the whole internet quiet for u.
+because today is ur day and i wanted
+the whole internet quiet for u.
 
 21 looks good on u.
-so does june 15 2025.
-so does every morning since.
+so does every laugh, every long call,
+every silly drive in cherthala,
+every dance, every scooty sunday.
 
 happy birthday, chungi.
 urs, always.`;

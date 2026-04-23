@@ -151,33 +151,16 @@ export function Act10Gallery({ items }: Props) {
           :global(.tile-scale) {
             animation: tile-scale linear both;
             animation-timeline: view();
-            animation-range: entry 0% cover 55%;
-          }
-          :global(.tile-exit) {
-            animation: tile-exit linear both;
-            animation-timeline: view();
-            animation-range: cover 60% exit 100%;
+            animation-range: entry 0% cover 40%;
           }
           @keyframes tile-scale {
             from {
-              transform: scale(0.7) translateY(24px);
+              transform: scale(0.88) translateY(12px);
               opacity: 0;
-              filter: blur(18px);
             }
             to {
               transform: scale(1) translateY(0);
               opacity: 1;
-              filter: blur(0);
-            }
-          }
-          @keyframes tile-exit {
-            from {
-              transform: scale(1);
-              opacity: 1;
-            }
-            to {
-              transform: scale(0.9);
-              opacity: 0.55;
             }
           }
         }
@@ -247,12 +230,12 @@ function Tile({
   return (
     <motion.button
       ref={ref}
-      initial={{ opacity: 0, y: 18, filter: "blur(14px)" }}
-      whileInView={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-      viewport={{ once: true, amount: 0.1 }}
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.05 }}
       transition={{
-        duration: 0.8,
-        delay: Math.min(index * 0.02, 0.35),
+        duration: 0.55,
+        delay: Math.min(index * 0.015, 0.25),
         ease: [0.32, 0.72, 0, 1],
       }}
       onClick={onOpen}
