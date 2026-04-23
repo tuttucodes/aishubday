@@ -11,6 +11,7 @@ const ACTS = [
   { id: "act-5", label: "reasons", tone: "light" },
   { id: "act-6", label: "songs", tone: "dark" },
   { id: "act-7", label: "cake", tone: "dark" },
+  { id: "act-11", label: "reel", tone: "dark" },
   { id: "act-10", label: "archive", tone: "dark" },
   { id: "act-9", label: "gift", tone: "dark" },
 ];

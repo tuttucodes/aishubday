@@ -9,6 +9,7 @@ import { Act6Songs } from "@/components/acts/Act6Songs";
 import { Act7Cake } from "@/components/acts/Act7Cake";
 import { Act9Gift } from "@/components/acts/Act9Gift";
 import { Act10Gallery } from "@/components/acts/Act10Gallery";
+import { Act11Hero } from "@/components/acts/Act11Hero";
 import { FinalCard } from "@/components/acts/FinalCard";
 import { SceneNav } from "@/components/SceneNav";
 import { RevealProvider, RevealGate } from "@/components/RevealProvider";
@@ -28,6 +29,7 @@ export default function Home() {
           <section id="act-5"><Act5Reasons /></section>
           <section id="act-6"><Act6Songs /></section>
           <section id="act-7"><Act7Cake /></section>
+          <section id="act-11"><Act11Hero src="/hero-letter.mp4" /></section>
           <section id="act-10"><Act10Gallery items={gallery} /></section>
           <section id="act-9"><Act9Gift /></section>
           <FinalCard />
