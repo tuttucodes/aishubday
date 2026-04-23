@@ -9,24 +9,27 @@ type Star = { pos: [number, number, number]; label?: string; caption?: string };
 
 // Star positions forming a rough outline spelling an approximation — using constellation shape
 const STARS: Star[] = [
-  { pos: [-6, 2, 0], label: "jun 15", caption: "the first yes." },
-  { pos: [-4, 3.5, -1], label: "first call", caption: "3 hours, felt like 5 minutes." },
-  { pos: [-2, 2, 0.5], label: "dakshinchitra", caption: "the tape. 👀" },
-  { pos: [0, 4, 0], label: "chikmagalur", caption: "those stairs. that coffee." },
-  { pos: [2, 2, -0.5], label: "aishu", caption: "every time i say it" },
-  { pos: [4, 3.5, 0], label: "chungi", caption: "my favourite sound" },
-  { pos: [6, 2, -1], label: "forever", caption: "working on it." },
-  { pos: [-5, -2, 0], label: "us" },
-  { pos: [-2, -3, 0.5] },
-  { pos: [0, -1.5, -1] },
-  { pos: [2, -3, 0] },
-  { pos: [5, -2, 0.5] },
+  { pos: [-7, 2.5, 0], label: "jun 15", caption: "the first yes. rained. ignored it." },
+  { pos: [-5, 3.8, -1], label: "first call", caption: "3 hrs felt like 5 min." },
+  { pos: [-3, 2.2, 0.5], label: "dakshinchitra", caption: "the tape 👀 never speak of it." },
+  { pos: [-1, 4.2, 0], label: "chikmagalur", caption: "those stairs. coffee mist." },
+  { pos: [1, 2.5, -0.6], label: "aishu", caption: "every time i say it." },
+  { pos: [3, 3.8, 0], label: "chungi", caption: "my favourite sound." },
+  { pos: [5, 2.5, -1], label: "first fight", caption: "and the first apology." },
+  { pos: [7, 3, 0], label: "forever", caption: "working on it." },
+  { pos: [-6, -1.8, 0.3], label: "us", caption: "the shorthand." },
+  { pos: [-4, -3.2, 0.5], label: "long calls", caption: "silences and all." },
+  { pos: [-1.5, -1.8, -1], label: "first trip", caption: "u packed 4 books." },
+  { pos: [0.5, -3.5, 0], label: "your laugh", caption: "reliable jpeg in my head." },
+  { pos: [2.5, -2, 0.5], label: "valentine", caption: "boring date, spectacular u." },
+  { pos: [4.5, -3.5, 0], label: "21", caption: "it suits u. obvs." },
+  { pos: [6, -1.8, 0.5], label: "today", caption: "the internet on mute." },
 ];
 
 const LINKS: [number, number][] = [
-  [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6],
-  [0, 7], [7, 8], [8, 9], [9, 10], [10, 11], [6, 11],
-  [3, 9], [2, 8], [4, 10],
+  [0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 7],
+  [0, 8], [8, 9], [9, 10], [10, 11], [11, 12], [12, 13], [13, 14], [7, 14],
+  [3, 10], [2, 9], [4, 11], [5, 12], [6, 13],
 ];
 
 function StarPoint({ s, index, onHover }: { s: Star; index: number; onHover: (i: number | null) => void }) {

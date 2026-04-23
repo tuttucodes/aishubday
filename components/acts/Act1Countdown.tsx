@@ -5,6 +5,8 @@ import { Canvas } from "@react-three/fiber";
 import { Environment, Float } from "@react-three/drei";
 import { motion, AnimatePresence } from "motion/react";
 import { PetalField } from "@/components/three/PetalField";
+import { ClientOnly } from "@/components/ClientOnly";
+import { useScrollLock } from "@/lib/useScrollLock";
 import { HER } from "@/lib/content";
 
 function calcDelta(target: Date) {
@@ -23,8 +25,13 @@ export function Act1Countdown() {
   const target = useRef(new Date(HER.bday + "T00:00:00"));
   const [t, setT] = useState<ReturnType<typeof calcDelta> | null>(null);
   const [arrived, setArrived] = useState(false);
+  const [bypass, setBypass] = useState(false);
 
   useEffect(() => {
+    if (typeof window !== "undefined") {
+      const q = new URLSearchParams(window.location.search);
+      if (q.get("unlock") === "1") setBypass(true);
+    }
     const tick = () => {
       const d = calcDelta(target.current);
       setT(d);
@@ -39,23 +46,42 @@ export function Act1Countdown() {
     return () => clearInterval(id);
   }, []);
 
+  // Konami-lite dev unlock: press "u" five times fast
+  useEffect(() => {
+    const keys: number[] = [];
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() !== "u") return;
+      const now = performance.now();
+      keys.push(now);
+      while (keys.length && now - keys[0] > 2500) keys.shift();
+      if (keys.length >= 5) setBypass(true);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, []);
+
+  const unlocked = arrived || bypass;
+  useScrollLock("act1-countdown", !unlocked);
+
   return (
     <section className="relative min-h-[100dvh] w-full overflow-hidden bg-[#050505]">
       <div className="absolute inset-0">
-        <Canvas
-          camera={{ position: [0, 0, 12], fov: 45 }}
-          gl={{ antialias: true, powerPreference: "high-performance" }}
-          dpr={[1, 1.5]}
-        >
-          <ambientLight intensity={0.3} />
-          <pointLight position={[5, 5, 5]} intensity={0.8} color="#ffbfd1" />
-          <pointLight position={[-5, 3, -5]} intensity={0.5} color="#ff4d6d" />
-          <fog attach="fog" args={["#050505", 12, 28]} />
-          <Float speed={0.4} rotationIntensity={0.1} floatIntensity={0.3}>
-            <PetalField color="#ffbfd1" />
-          </Float>
-          <Environment preset="night" />
-        </Canvas>
+        <ClientOnly>
+          <Canvas
+            camera={{ position: [0, 0, 12], fov: 45 }}
+            gl={{ antialias: true, powerPreference: "high-performance" }}
+            dpr={[1, 1.5]}
+          >
+            <ambientLight intensity={0.3} />
+            <pointLight position={[5, 5, 5]} intensity={0.8} color="#ffbfd1" />
+            <pointLight position={[-5, 3, -5]} intensity={0.5} color="#ff4d6d" />
+            <fog attach="fog" args={["#050505", 12, 28]} />
+            <Float speed={0.4} rotationIntensity={0.1} floatIntensity={0.3}>
+              <PetalField color="#ffbfd1" />
+            </Float>
+            <Environment preset="night" />
+          </Canvas>
+        </ClientOnly>
       </div>
 
       {/* Radial glow */}
@@ -78,7 +104,7 @@ export function Act1Countdown() {
         </motion.span>
 
         <AnimatePresence mode="wait">
-          {!arrived && t ? (
+          {!unlocked && t ? (
             <motion.div
               key="counting"
               className="flex flex-col items-center"
@@ -116,8 +142,15 @@ export function Act1Countdown() {
                 ))}
               </div>
               <p className="mt-10 text-sm text-white/40 text-center max-w-md">
-                the clock hits zero, the curtain lifts. scroll when it does.
+                the page is locked until midnight. the curtain lifts at 00:00.
               </p>
+              <div className="mt-3 flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-white/35">
+                <span className="relative flex h-2 w-2">
+                  <span className="absolute inline-flex h-full w-full rounded-full bg-rose/70 animate-ping" />
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-rose" />
+                </span>
+                door · sealed
+              </div>
             </motion.div>
           ) : (
             <motion.div

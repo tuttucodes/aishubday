@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { Canvas } from "@react-three/fiber";
 import { Environment } from "@react-three/drei";
 import { VinylRecord } from "@/components/three/VinylRecord";
+import { ClientOnly } from "@/components/ClientOnly";
 import { SONGS } from "@/lib/content";
 
 export function Act6Songs() {
@@ -14,13 +15,15 @@ export function Act6Songs() {
       <div className="grid md:grid-cols-2 min-h-[100dvh]">
         {/* Left: vinyl */}
         <div className="relative h-[60vh] md:h-auto">
-          <Canvas camera={{ position: [0, 0, 5], fov: 40 }} dpr={[1, 1.5]}>
-            <ambientLight intensity={0.4} />
-            <directionalLight position={[3, 5, 3]} intensity={1.2} color="#ff8ea0" />
-            <directionalLight position={[-3, -2, 3]} intensity={0.5} color="#c9a16d" />
-            <VinylRecord spinning />
-            <Environment preset="night" />
-          </Canvas>
+          <ClientOnly>
+            <Canvas camera={{ position: [0, 0, 5], fov: 40 }} dpr={[1, 1.5]}>
+              <ambientLight intensity={0.4} />
+              <directionalLight position={[3, 5, 3]} intensity={1.2} color="#ff8ea0" />
+              <directionalLight position={[-3, -2, 3]} intensity={0.5} color="#c9a16d" />
+              <VinylRecord spinning />
+              <Environment preset="night" />
+            </Canvas>
+          </ClientOnly>
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#0a0a0a]" />
         </div>
 

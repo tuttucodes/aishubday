@@ -10,6 +10,7 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
     });
+    (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
     let raf: number;
     const loop = (time: number) => {
       lenis.raf(time);
@@ -19,6 +20,7 @@ export function LenisProvider({ children }: { children: React.ReactNode }) {
     return () => {
       cancelAnimationFrame(raf);
       lenis.destroy();
+      delete (window as unknown as { __lenis?: Lenis }).__lenis;
     };
   }, []);
   return <>{children}</>;

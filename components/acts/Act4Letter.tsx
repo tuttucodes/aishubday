@@ -35,13 +35,13 @@ export function Act4Letter() {
       ref={root}
       className="relative min-h-[200dvh] bg-[var(--paper)] text-[#1a1a1a] paper-tex scene"
     >
-      <div className="sticky top-0 min-h-[100dvh] flex flex-col items-center justify-center px-6 py-24">
-        <p className="text-[10px] uppercase tracking-[0.3em] text-[#8a6a3e] mb-6">act · iv</p>
-        <h2 className="font-[var(--font-fraunces)] italic text-4xl md:text-6xl mb-16 text-[#3a2a1a]">
+      <div className="sticky top-0 min-h-[100dvh] flex flex-col items-center justify-center px-5 md:px-6 py-16 md:py-24">
+        <p className="text-[10px] uppercase tracking-[0.3em] text-[#8a6a3e] mb-4 md:mb-6">act · iv</p>
+        <h2 className="font-[var(--font-fraunces)] italic text-3xl md:text-6xl mb-10 md:mb-16 text-[#3a2a1a]">
           a letter.
         </h2>
 
-        <div className="max-w-2xl font-[var(--font-fraunces)] text-2xl md:text-3xl leading-[1.5] text-[#2a2218]" style={{ fontVariationSettings: "'opsz' 144" }}>
+        <div className="max-w-2xl font-[var(--font-fraunces)] text-lg sm:text-xl md:text-3xl leading-[1.55] md:leading-[1.5] text-[#2a2218]" style={{ fontVariationSettings: "'opsz' 144" }}>
           {words.map((w, i) => {
             if (/^\s+$/.test(w)) return <span key={i}>{w}</span>;
             return (
@@ -58,7 +58,7 @@ export function Act4Letter() {
           })}
         </div>
 
-        <p className="mt-16 font-[var(--font-caveat)] text-4xl text-[#8b3a3a]">
+        <p className="mt-10 md:mt-16 font-[var(--font-caveat)] text-3xl md:text-4xl text-[#8b3a3a]">
           — yours.
         </p>
       </div>

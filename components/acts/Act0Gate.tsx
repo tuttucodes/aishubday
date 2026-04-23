@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
+import { useScrollLock } from "@/lib/useScrollLock";
 
 const MEMES: { src: string; caption: string }[] = [
   { src: "/memes/please.gif", caption: "pls?? 🥺" },
@@ -51,9 +52,7 @@ export function Act0Gate() {
     setTimeout(() => setGone(true), 1100);
   };
 
-  useEffect(() => {
-    document.documentElement.style.overflow = passed ? "auto" : "hidden";
-  }, [passed]);
+  useScrollLock("act0-gate", !passed && !gone);
 
   if (gone) return null;
 

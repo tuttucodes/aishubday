@@ -8,7 +8,7 @@ import { motion } from "motion/react";
 
 type Frame = { date: string; title: string; caption: string; img?: string };
 
-const FRAMES: Frame[] = [
+const DEFAULT_FRAMES: Frame[] = [
   { date: "2025 · 06 · 15", title: "day zero", caption: "the first yes. it rained. we ignored it." },
   { date: "2025 · 07", title: "nights", caption: "long calls. longer silences. both lovely." },
   { date: "2025 · 08", title: "dakshinchitra", caption: "the infamous tape. (never speak of it.)" },
@@ -19,7 +19,21 @@ const FRAMES: Frame[] = [
   { date: "2026 · 04 · 24", title: "today", caption: "ur day. the whole internet on mute." },
 ];
 
-export function Act2Timeline() {
+export function Act2Timeline({ photos = [] }: { photos?: string[] }) {
+  const FRAMES: Frame[] = DEFAULT_FRAMES.map((f, i) => ({
+    ...f,
+    img: photos[i] ?? f.img,
+  }));
+  // extra photos beyond defaults → append as bonus frames
+  photos.slice(DEFAULT_FRAMES.length).forEach((p, i) => {
+    FRAMES.push({
+      date: "bonus",
+      title: `frame ${DEFAULT_FRAMES.length + i + 1}`,
+      caption: "another one.",
+      img: p,
+    });
+  });
+
   const root = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
 
