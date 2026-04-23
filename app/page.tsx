@@ -1,6 +1,6 @@
 import { Act0Gate } from "@/components/acts/Act0Gate";
 import { Act1Countdown } from "@/components/acts/Act1Countdown";
-import { readPhotos } from "@/lib/photos.server";
+import { readMedia, readBonus } from "@/lib/media.server";
 import { Act2Timeline } from "@/components/acts/Act2Timeline";
 import { Act3Constellation } from "@/components/acts/Act3Constellation";
 import { Act4Letter } from "@/components/acts/Act4Letter";
@@ -14,7 +14,8 @@ import { SceneNav } from "@/components/SceneNav";
 import { RevealProvider, RevealGate } from "@/components/RevealProvider";
 
 export default function Home() {
-  const photos = readPhotos();
+  const media = readMedia();
+  const bonus = readBonus();
   return (
     <RevealProvider>
       <main className="relative">
@@ -22,7 +23,7 @@ export default function Home() {
         <section id="act-1"><Act1Countdown /></section>
         <RevealGate>
           <SceneNav />
-          <section id="act-2"><Act2Timeline photos={photos} /></section>
+          <section id="act-2"><Act2Timeline media={media} bonus={bonus} /></section>
           <section id="act-3"><Act3Constellation /></section>
           <section id="act-4"><Act4Letter /></section>
           <section id="act-5"><Act5Reasons /></section>

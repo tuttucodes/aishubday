@@ -42,34 +42,56 @@ export function Act6Songs() {
                 onMouseEnter={() => setActive(i)}
                 whileHover={{ x: 8 }}
                 transition={{ duration: 0.35, ease: [0.32, 0.72, 0, 1] }}
-                className="group"
+                className="group py-5 border-b border-white/5 hover:border-rose/40 transition-colors"
               >
-                <a
-                  href={s.youtube}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-baseline justify-between py-5 border-b border-white/5 hover:border-rose/40 transition-colors"
-                >
-                  <div className="flex items-baseline gap-6">
-                    <span className="font-mono text-[10px] text-white/40 w-6">
+                <div className="flex items-start justify-between gap-4">
+                  <div className="flex items-baseline gap-6 flex-1">
+                    <span className="font-mono text-[10px] text-white/40 w-6 shrink-0">
                       {String(i + 1).padStart(2, "0")}
                     </span>
-                    <div>
+                    <div className="flex-1">
                       <span className="font-[var(--font-fraunces)] italic text-2xl md:text-3xl block leading-tight group-hover:text-rose transition-colors">
                         {s.title}
                       </span>
                       <span className="text-xs text-white/40 uppercase tracking-[0.2em] mt-1 block">
                         {s.artist}
                       </span>
+                      {s.note && (
+                        <span className="text-xs text-white/35 italic mt-2 block font-[var(--font-fraunces)]">
+                          {s.note}
+                        </span>
+                      )}
+                      <div className="flex items-center gap-2 mt-3">
+                        <a
+                          href={s.youtube}
+                          target="_blank"
+                          rel="noreferrer"
+                          className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 hover:bg-rose/20 hair-dark text-[10px] uppercase tracking-[0.2em] text-white/70 hover:text-rose transition-colors"
+                        >
+                          <span className="w-1.5 h-1.5 rounded-full bg-rose" />
+                          youtube
+                        </a>
+                        {s.spotify && (
+                          <a
+                            href={s.spotify}
+                            target="_blank"
+                            rel="noreferrer"
+                            className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white/5 hover:bg-[#1db954]/20 hair-dark text-[10px] uppercase tracking-[0.2em] text-white/70 hover:text-[#1db954] transition-colors"
+                          >
+                            <span className="w-1.5 h-1.5 rounded-full bg-[#1db954]" />
+                            spotify
+                          </a>
+                        )}
+                      </div>
                     </div>
                   </div>
                   <motion.span
-                    className="text-white/30 group-hover:text-rose"
-                    animate={{ x: active === i ? 0 : -4 }}
+                    className="text-white/30 text-xl"
+                    animate={{ x: active === i ? 0 : -4, opacity: active === i ? 1 : 0.4 }}
                   >
                     ↗
                   </motion.span>
-                </a>
+                </div>
               </motion.li>
             ))}
           </ol>

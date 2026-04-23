@@ -9,11 +9,43 @@ export const HER = {
   togetherLabel: "June 15, 2025",
 };
 
-export const SONGS = [
-  { title: "Panchasara Umma", artist: "malayalam", youtube: "https://www.youtube.com/results?search_query=panchasara+umma" },
-  { title: "Enthanennu Ennodu Onnum", artist: "malayalam", youtube: "https://www.youtube.com/results?search_query=Enthanennu+ennodu+onnum" },
-  { title: "From the Start", artist: "Laufey", youtube: "https://www.youtube.com/watch?v=K4IIq2tlJh0" },
-  { title: "Les", artist: "Childish Gambino", youtube: "https://www.youtube.com/watch?v=8X6eMd7XeNo" },
+export type Song = {
+  title: string;
+  artist: string;
+  youtube: string;
+  spotify?: string;
+  note?: string;
+};
+
+export const SONGS: Song[] = [
+  {
+    title: "Panchasara Umma",
+    artist: "Ennum Eppozhum · malayalam",
+    youtube: "https://music.youtube.com/search?q=Panchasara+Umma+Ennum+Eppozhum",
+    spotify: "https://open.spotify.com/search/Panchasara%20Umma",
+    note: "slow one. plays when u smile at nothing.",
+  },
+  {
+    title: "Enthanennu Ennodu Onnum",
+    artist: "malayalam",
+    youtube: "https://music.youtube.com/search?q=Enthanennu+Ennodu+Onnum+Paranjeela",
+    spotify: "https://open.spotify.com/search/Enthanennu%20Ennodu%20Onnum",
+    note: "our rainy-day song.",
+  },
+  {
+    title: "From the Start",
+    artist: "Laufey",
+    youtube: "https://www.youtube.com/watch?v=K4IIq2tlJh0",
+    spotify: "https://open.spotify.com/track/5Eax0qFko2dh7Rl2lYs3bx",
+    note: "u hummed this in the car. i've hummed it since.",
+  },
+  {
+    title: "Les",
+    artist: "Childish Gambino",
+    youtube: "https://www.youtube.com/watch?v=8X6eMd7XeNo",
+    spotify: "https://open.spotify.com/search/Les%20Childish%20Gambino",
+    note: "late-night us.",
+  },
 ];
 
 export const MEMORIES = [

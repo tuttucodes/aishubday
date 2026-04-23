@@ -32,6 +32,7 @@ export function Act1Countdown() {
   useEffect(() => {
     if (typeof window !== "undefined") {
       const q = new URLSearchParams(window.location.search);
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       if (q.get("unlock") === "1") setBypass(true);
     }
     const tick = () => {
@@ -62,11 +63,7 @@ export function Act1Countdown() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  useEffect(() => {
-    if (skipAll) setBypass(true);
-  }, [skipAll]);
-
-  const unlocked = arrived || bypass;
+  const unlocked = arrived || bypass || skipAll;
   useScrollLock("act1-countdown", !unlocked);
 
   useEffect(() => {

@@ -46,6 +46,7 @@ export function Act0Gate() {
   };
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     if (skipAll && !passed) pass();
   }, [skipAll, passed]);
 
