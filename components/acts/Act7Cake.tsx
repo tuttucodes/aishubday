@@ -26,7 +26,7 @@ export function Act7Cake() {
       <div className="grid md:grid-cols-[1.2fr,1fr] min-h-[100dvh]">
         <div className="relative h-[60vh] md:h-auto">
           <ClientOnly>
-            <InViewOnly rootMargin="600px 0px">
+            <InViewOnly rootMargin="600px 0px" keepMounted>
               <Canvas
                 shadows="basic"
                 camera={{ position: [0, 2.5, 6], fov: 40 }}

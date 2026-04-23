@@ -32,7 +32,7 @@ export function Act9Gift() {
 
         <div className="flex-1 relative">
           <ClientOnly>
-            <InViewOnly rootMargin="600px 0px">
+            <InViewOnly rootMargin="600px 0px" keepMounted>
               <Canvas
                 shadows="basic"
                 camera={{ position: [3, 2.2, 4.5], fov: 40 }}

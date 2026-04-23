@@ -20,7 +20,7 @@ export function Act6Songs() {
         {/* Left: vinyl */}
         <div className="relative h-[60vh] md:h-auto">
           <ClientOnly>
-            <InViewOnly rootMargin="600px 0px">
+            <InViewOnly rootMargin="600px 0px" keepMounted>
               <Canvas camera={{ position: [0, 0, 5], fov: 40 }} dpr={[1, 1.5]}>
                 <ambientLight intensity={0.4} />
                 <directionalLight position={[3, 5, 3]} intensity={1.2} color="#ff8ea0" />

@@ -93,16 +93,21 @@ export function BackgroundMusicProvider({ children }: { children: ReactNode }) {
             setPlaying(true);
             return;
           }
-          if (state === 0 || state === 2) {
-            // If user didn't pause, kick the player back to play after a
-            // short beat (handles loop gap + ad ends + surprise pauses).
+          if (state === 0) {
+            // Ended — restart same track for a real loop (built-in loop
+            // param is flaky for many music videos).
             if (!userPausedRef.current) {
-              setTimeout(() => {
-                if (!userPausedRef.current) {
-                  ytCommand("seekTo", [0, true]);
-                  ytCommand("playVideo");
-                }
-              }, 150);
+              ytCommand("seekTo", [0, true]);
+              ytCommand("playVideo");
+            } else {
+              setPlaying(false);
+            }
+          } else if (state === 2) {
+            // Paused — if user didn't click pause, nudge back to play.
+            // Do NOT seek; preserves current position through buffering
+            // or fleeting ad transitions.
+            if (!userPausedRef.current) {
+              ytCommand("playVideo");
             } else {
               setPlaying(false);
             }
