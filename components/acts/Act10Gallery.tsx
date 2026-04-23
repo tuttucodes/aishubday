@@ -318,6 +318,7 @@ function AutoVideo({ src, poster, alt }: { src: string; poster: string; alt: str
       ref={ref}
       src={src}
       poster={poster}
+      autoPlay
       muted
       loop
       playsInline

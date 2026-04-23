@@ -96,6 +96,7 @@ export function Act11Hero({ src }: Props) {
               <video
                 ref={videoRef}
                 src={src}
+                autoPlay
                 muted
                 loop
                 playsInline

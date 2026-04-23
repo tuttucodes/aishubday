@@ -401,7 +401,7 @@ function PolaroidItem({
             <video
               src={it.src}
               poster={it.thumb}
-              autoPlay={focused}
+              autoPlay
               muted
               loop
               playsInline
