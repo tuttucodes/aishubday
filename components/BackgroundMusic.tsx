@@ -4,7 +4,9 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
+  useRef,
   useState,
   type ReactNode,
 } from "react";
@@ -25,26 +27,71 @@ export function BackgroundMusicProvider({ children }: { children: ReactNode }) {
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [startAt, setStartAt] = useState<number>(0);
   const [playing, setPlaying] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
 
   const song = useMemo(
     () => SONGS.find((s) => s.youtubeId && s.youtubeId === currentId) ?? null,
     [currentId],
   );
 
-  const play = useCallback((youtubeId: string, start = 0) => {
-    setCurrentId(youtubeId);
-    setStartAt(start);
-    setPlaying(true);
+  // postMessage helpers — talk to the YT iframe player.
+  const ytCommand = useCallback((func: string, args: unknown[] = []) => {
+    const el = iframeRef.current?.contentWindow;
+    if (!el) return;
+    el.postMessage(
+      JSON.stringify({ event: "command", func, args }),
+      "https://www.youtube.com",
+    );
   }, []);
 
+  const play = useCallback(
+    (youtubeId: string, start = 0) => {
+      // New track: swap src + rely on autoplay=1. Same track: just resume.
+      if (youtubeId !== currentId) {
+        setCurrentId(youtubeId);
+        setStartAt(start);
+      } else {
+        ytCommand("playVideo");
+      }
+      setPlaying(true);
+    },
+    [currentId, ytCommand],
+  );
+
   const pause = useCallback(() => {
+    ytCommand("pauseVideo");
     setPlaying(false);
-  }, []);
+  }, [ytCommand]);
 
   const toggle = useCallback(() => {
     if (!currentId) return;
-    setPlaying((p) => !p);
-  }, [currentId]);
+    if (playing) pause();
+    else {
+      ytCommand("playVideo");
+      setPlaying(true);
+    }
+  }, [currentId, playing, pause, ytCommand]);
+
+  // After iframe mounts, YT auto-plays because autoplay=1 is in the URL.
+  // Listen for YT state messages so external controls (mute, ad end, etc)
+  // keep React state synced.
+  useEffect(() => {
+    const onMsg = (e: MessageEvent) => {
+      if (e.origin !== "https://www.youtube.com") return;
+      try {
+        const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
+        if (data.event === "onStateChange") {
+          // 1=playing, 2=paused, 0=ended
+          if (data.info === 1) setPlaying(true);
+          if (data.info === 2 || data.info === 0) setPlaying(false);
+        }
+      } catch {
+        /* ignore */
+      }
+    };
+    window.addEventListener("message", onMsg);
+    return () => window.removeEventListener("message", onMsg);
+  }, []);
 
   const value = useMemo<MusicCtx>(
     () => ({ song, playing, play, pause, toggle }),
@@ -54,7 +101,7 @@ export function BackgroundMusicProvider({ children }: { children: ReactNode }) {
   return (
     <Ctx.Provider value={value}>
       {children}
-      <BackgroundMusicIframe id={currentId} playing={playing} startAt={startAt} />
+      <BackgroundMusicIframe id={currentId} startAt={startAt} iframeRef={iframeRef} />
       <NowPlayingPill />
     </Ctx.Provider>
   );
@@ -66,36 +113,57 @@ export function useBackgroundMusic() {
   return v;
 }
 
-// Hidden YouTube iframe that holds the audio. Uses the `loop` playlist trick
-// so the same track repeats forever. Re-mounts when track id changes.
+// Off-screen iframe that holds the audio. Kept MOUNTED once a track is
+// picked — toggling play/pause via postMessage preserves the original
+// user-gesture context, so later resumes work without re-gesture.
+//
+// Dimensions are 320x180 (not 1x1) because some browsers throttle autoplay
+// on sub-100px iframes. Positioned off-screen via transform + fixed.
 function BackgroundMusicIframe({
   id,
-  playing,
   startAt,
+  iframeRef,
 }: {
   id: string | null;
-  playing: boolean;
   startAt: number;
+  iframeRef: React.RefObject<HTMLIFrameElement | null>;
 }) {
   if (!id) return null;
-  // Unmounting the iframe when paused fully stops audio; remounting on play
-  // re-starts. Keying by id+playing forces fresh iframe per state change.
-  if (!playing) return null;
+  const origin =
+    typeof window !== "undefined" ? window.location.origin : "";
   const startParam = startAt > 0 ? `&start=${startAt}` : "";
-  const src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&controls=0&modestbranding=1&playsinline=1&loop=1&playlist=${id}&rel=0&iv_load_policy=3${startParam}`;
+  const src =
+    `https://www.youtube.com/embed/${id}` +
+    `?autoplay=1&controls=0&modestbranding=1&playsinline=1` +
+    `&loop=1&playlist=${id}&rel=0&iv_load_policy=3&enablejsapi=1` +
+    `&origin=${encodeURIComponent(origin)}${startParam}`;
   return (
-    <iframe
-      key={`${id}-${playing}-${startAt}`}
-      src={src}
-      title="background music"
-      allow="autoplay; encrypted-media"
+    <div
       aria-hidden
-      className="fixed bottom-0 left-0 w-[1px] h-[1px] opacity-0 pointer-events-none"
-    />
+      style={{
+        position: "fixed",
+        left: "-10000px",
+        top: 0,
+        width: 320,
+        height: 180,
+        pointerEvents: "none",
+        opacity: 0,
+      }}
+    >
+      <iframe
+        ref={iframeRef}
+        key={`${id}-${startAt}`}
+        src={src}
+        title="background music"
+        allow="autoplay; encrypted-media"
+        width={320}
+        height={180}
+      />
+    </div>
   );
 }
 
-// Floating mini-player pill, bottom-right. Only visible when a track is chosen.
+// Floating mini-player pill, bottom-right.
 function NowPlayingPill() {
   const { song, playing, toggle } = useContext(Ctx) ?? {};
   return (
