@@ -26,7 +26,7 @@ export function Act7Cake() {
         <div className="relative h-[60vh] md:h-auto">
           <ClientOnly>
             <Canvas
-              shadows
+              shadows="basic"
               camera={{ position: [0, 2.5, 6], fov: 40 }}
               dpr={[1, 1.5]}
             >

@@ -32,7 +32,7 @@ export function Act9Gift() {
         <div className="flex-1 relative">
           <ClientOnly>
             <Canvas
-              shadows
+              shadows="basic"
               camera={{ position: [3, 2.2, 4.5], fov: 40 }}
               dpr={[1, 1.5]}
             >

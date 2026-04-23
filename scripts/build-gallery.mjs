@@ -217,12 +217,14 @@ async function processVideo(src, idSlug) {
     "1024",
     full,
   ]);
+  // `-ss` AFTER `-i` = slower but works on short clips (seeks past end
+  // would silently produce no frame with `-ss` before input).
   await runP("ffmpeg", [
     "-y",
-    "-ss",
-    "0.8",
     "-i",
     src,
+    "-ss",
+    "0.2",
     "-vframes",
     "1",
     "-vf",
