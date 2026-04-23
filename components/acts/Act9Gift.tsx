@@ -5,6 +5,7 @@ import { Canvas } from "@react-three/fiber";
 import { ContactShadows, Environment } from "@react-three/drei";
 import { GiftBox } from "@/components/three/GiftBox";
 import { ClientOnly } from "@/components/ClientOnly";
+import { InViewOnly } from "@/components/InViewOnly";
 import { AnimatePresence, motion, useScroll, useSpring, useTransform } from "motion/react";
 
 export function Act9Gift() {
@@ -31,18 +32,20 @@ export function Act9Gift() {
 
         <div className="flex-1 relative">
           <ClientOnly>
-            <Canvas
-              shadows="basic"
-              camera={{ position: [3, 2.2, 4.5], fov: 40 }}
-              dpr={[1, 1.5]}
-            >
-              <ambientLight intensity={0.3} />
-              <directionalLight position={[5, 6, 5]} intensity={1} color="#ffd9a0" castShadow />
-              <directionalLight position={[-3, 3, -2]} intensity={0.4} color="#ff8ea0" />
-              <GiftBox progress={opened ? 1 : p} />
-              <ContactShadows position={[0, 0, 0]} opacity={0.5} blur={2.5} far={6} />
-              <Environment preset="warehouse" />
-            </Canvas>
+            <InViewOnly rootMargin="600px 0px">
+              <Canvas
+                shadows="basic"
+                camera={{ position: [3, 2.2, 4.5], fov: 40 }}
+                dpr={[1, 1.5]}
+              >
+                <ambientLight intensity={0.3} />
+                <directionalLight position={[5, 6, 5]} intensity={1} color="#ffd9a0" castShadow />
+                <directionalLight position={[-3, 3, -2]} intensity={0.4} color="#ff8ea0" />
+                <GiftBox progress={opened ? 1 : p} />
+                <ContactShadows position={[0, 0, 0]} opacity={0.5} blur={2.5} far={6} />
+                <Environment preset="warehouse" />
+              </Canvas>
+            </InViewOnly>
           </ClientOnly>
 
           {/* Tap to open shortcut */}

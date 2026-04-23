@@ -6,6 +6,7 @@ import { OrbitControls, Environment, ContactShadows } from "@react-three/drei";
 import { motion, AnimatePresence } from "motion/react";
 import { CakeScene } from "@/components/three/CakeScene";
 import { ClientOnly } from "@/components/ClientOnly";
+import { InViewOnly } from "@/components/InViewOnly";
 import { useMicBlow } from "@/lib/useMicBlow";
 
 export function Act7Cake() {
@@ -25,18 +26,20 @@ export function Act7Cake() {
       <div className="grid md:grid-cols-[1.2fr,1fr] min-h-[100dvh]">
         <div className="relative h-[60vh] md:h-auto">
           <ClientOnly>
-            <Canvas
-              shadows="basic"
-              camera={{ position: [0, 2.5, 6], fov: 40 }}
-              dpr={[1, 1.5]}
-            >
-              <ambientLight intensity={0.25} />
-              <directionalLight position={[3, 5, 3]} intensity={0.6} color="#ffd9a0" castShadow />
-              <CakeScene blownOut={blown} count={21} />
-              <ContactShadows position={[0, -1.2, 0]} opacity={0.5} blur={2.5} far={5} />
-              <Environment preset="sunset" />
-              <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.8} />
-            </Canvas>
+            <InViewOnly rootMargin="600px 0px">
+              <Canvas
+                shadows="basic"
+                camera={{ position: [0, 2.5, 6], fov: 40 }}
+                dpr={[1, 1.5]}
+              >
+                <ambientLight intensity={0.25} />
+                <directionalLight position={[3, 5, 3]} intensity={0.6} color="#ffd9a0" castShadow />
+                <CakeScene blownOut={blown} count={21} />
+                <ContactShadows position={[0, -1.2, 0]} opacity={0.5} blur={2.5} far={5} />
+                <Environment preset="sunset" />
+                <OrbitControls enableZoom={false} enablePan={false} autoRotate autoRotateSpeed={0.8} />
+              </Canvas>
+            </InViewOnly>
           </ClientOnly>
           <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-[#050505] to-transparent" />
         </div>
