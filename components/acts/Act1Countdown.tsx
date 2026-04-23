@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "motion/react";
 import { PetalField } from "@/components/three/PetalField";
 import { ClientOnly } from "@/components/ClientOnly";
 import { useScrollLock } from "@/lib/useScrollLock";
+import { useReveal } from "@/components/RevealProvider";
 import { HER } from "@/lib/content";
 
 function calcDelta(target: Date) {
@@ -26,6 +27,7 @@ export function Act1Countdown() {
   const [t, setT] = useState<ReturnType<typeof calcDelta> | null>(null);
   const [arrived, setArrived] = useState(false);
   const [bypass, setBypass] = useState(false);
+  const { unlock } = useReveal();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -62,6 +64,13 @@ export function Act1Countdown() {
 
   const unlocked = arrived || bypass;
   useScrollLock("act1-countdown", !unlocked);
+
+  useEffect(() => {
+    if (unlocked) {
+      const id = setTimeout(() => unlock(), 2600);
+      return () => clearTimeout(id);
+    }
+  }, [unlocked, unlock]);
 
   return (
     <section className="relative min-h-[100dvh] w-full overflow-hidden bg-[#050505]">

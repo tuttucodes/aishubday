@@ -9,3 +9,4 @@ dist
 screenshots/
 .env*
 !.env.example
+tsconfig.tsbuildinfo

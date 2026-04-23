@@ -11,23 +11,28 @@ import { Act8Song } from "@/components/acts/Act8Song";
 import { Act9Gift } from "@/components/acts/Act9Gift";
 import { FinalCard } from "@/components/acts/FinalCard";
 import { SceneNav } from "@/components/SceneNav";
+import { RevealProvider, RevealGate } from "@/components/RevealProvider";
 
 export default function Home() {
   const photos = readPhotos();
   return (
-    <main className="relative">
-      <Act0Gate />
-      <SceneNav />
-      <section id="act-1"><Act1Countdown /></section>
-      <section id="act-2"><Act2Timeline photos={photos} /></section>
-      <section id="act-3"><Act3Constellation /></section>
-      <section id="act-4"><Act4Letter /></section>
-      <section id="act-5"><Act5Reasons /></section>
-      <section id="act-6"><Act6Songs /></section>
-      <section id="act-7"><Act7Cake /></section>
-      <section id="act-8"><Act8Song /></section>
-      <section id="act-9"><Act9Gift /></section>
-      <FinalCard />
-    </main>
+    <RevealProvider>
+      <main className="relative">
+        <Act0Gate />
+        <section id="act-1"><Act1Countdown /></section>
+        <RevealGate>
+          <SceneNav />
+          <section id="act-2"><Act2Timeline photos={photos} /></section>
+          <section id="act-3"><Act3Constellation /></section>
+          <section id="act-4"><Act4Letter /></section>
+          <section id="act-5"><Act5Reasons /></section>
+          <section id="act-6"><Act6Songs /></section>
+          <section id="act-7"><Act7Cake /></section>
+          <section id="act-8"><Act8Song /></section>
+          <section id="act-9"><Act9Gift /></section>
+          <FinalCard />
+        </RevealGate>
+      </main>
+    </RevealProvider>
   );
 }
