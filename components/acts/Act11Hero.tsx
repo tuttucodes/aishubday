@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import { motion, useScroll, useTransform } from "motion/react";
+import { useBackgroundMusic } from "@/components/BackgroundMusic";
 
 type Props = { src: string };
 
@@ -11,6 +12,7 @@ export function Act11Hero({ src }: Props) {
   const [playing, setPlaying] = useState(false);
   const [muted, setMuted] = useState(true);
   const [exists, setExists] = useState<boolean | null>(null);
+  const { playing: bgPlaying, pause: pauseBg } = useBackgroundMusic();
 
   const { scrollYProgress } = useScroll({ target: root, offset: ["start end", "end start"] });
   const scale = useTransform(scrollYProgress, [0, 0.4, 0.6, 1], [0.85, 1, 1, 0.95]);
@@ -60,6 +62,8 @@ export function Act11Hero({ src }: Props) {
     el.muted = next;
     el.volume = 1;
     if (!next) {
+      // duck any background track so audio doesn't clash
+      if (bgPlaying) pauseBg();
       // unmute needs a user gesture — play call re-arms audio
       el.play().then(() => setPlaying(true)).catch(() => {});
     }
