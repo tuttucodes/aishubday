@@ -23,7 +23,8 @@ function calcDelta(target: Date) {
 }
 
 export function Act1Countdown() {
-  const target = useRef(new Date(HER.bday + "T00:00:00"));
+  // 5-second countdown from mount → auto-reveal.
+  const target = useRef(new Date(Date.now() + 5000));
   const [t, setT] = useState<ReturnType<typeof calcDelta> | null>(null);
   const [arrived, setArrived] = useState(false);
   const [bypass, setBypass] = useState(false);

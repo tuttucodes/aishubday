@@ -1,4 +1,3 @@
-import { Act0Gate } from "@/components/acts/Act0Gate";
 import { Act1Countdown } from "@/components/acts/Act1Countdown";
 import { readGallery } from "@/lib/gallery.server";
 import { Act2Timeline } from "@/components/acts/Act2Timeline";
@@ -19,7 +18,6 @@ export default function Home() {
   return (
     <RevealProvider>
       <main className="relative">
-        <Act0Gate />
         <section id="act-1"><Act1Countdown /></section>
         <RevealGate>
           <SceneNav />
