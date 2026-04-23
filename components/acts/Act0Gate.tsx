@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useScrollLock } from "@/lib/useScrollLock";
 
@@ -22,30 +22,21 @@ const TEASE_COPY = [
   "this is test three of patience.",
   "look me in the eye and click yes.",
   "i made this entire site. please.",
+  "last chance. no more no.",
 ];
+
+const MAX_NO = 7;
 
 export function Act0Gate() {
   const [noClicks, setNoClicks] = useState(0);
   const [passed, setPassed] = useState(false);
   const [gone, setGone] = useState(false);
-  const [noPos, setNoPos] = useState<{ x: number; y: number } | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-
-  const dodge = () => {
-    if (noClicks < 1) return;
-    const pad = 80;
-    const w = window.innerWidth;
-    const h = window.innerHeight;
-    const x = Math.random() * (w - pad * 2) - (w / 2 - pad);
-    const y = Math.random() * (h - pad * 2) - (h / 2 - pad);
-    setNoPos({ x, y });
-  };
 
   const meme = MEMES[Math.min(noClicks, MEMES.length - 1)];
   const tease = TEASE_COPY[Math.min(noClicks - 1, TEASE_COPY.length - 1)];
-  const yesScale = 1 + noClicks * 0.45;
-  const noScale = Math.max(0.15, 1 - noClicks * 0.22);
-  const noHidden = noClicks >= 6;
+  const yesScale = 1 + Math.min(noClicks, MAX_NO) * 0.12;
+  const noScale = Math.max(0.45, 1 - noClicks * 0.08);
+  const noHidden = noClicks >= MAX_NO;
 
   const pass = () => {
     setPassed(true);
@@ -60,7 +51,6 @@ export function Act0Gate() {
     <AnimatePresence>
       {!passed && (
         <motion.div
-          ref={containerRef}
           className="fixed inset-0 z-[90] bg-[#0a0508] overflow-hidden flex items-center justify-center px-6"
           initial={{ opacity: 1 }}
           exit={{ opacity: 0, filter: "blur(30px)", scale: 1.04 }}
@@ -159,17 +149,13 @@ export function Act0Gate() {
               {!noHidden ? (
                 <motion.button
                   onClick={() => setNoClicks((c) => c + 1)}
-                  onMouseEnter={dodge}
-                  onFocus={dodge}
                   animate={{
                     scale: noScale,
-                    x: noPos?.x ?? 0,
-                    y: noPos?.y ?? 0,
-                    rotate: noClicks * 6,
+                    rotate: noClicks * 3,
                   }}
                   transition={{ type: "spring", stiffness: 220, damping: 18 }}
-                  className="px-6 py-3 rounded-full bg-white/5 hair-dark bezel-inner text-white/70 text-sm cursor-pointer"
-                  style={{ zIndex: 1 }}
+                  className="px-6 py-3 rounded-full bg-white/5 hair-dark bezel-inner text-white/70 text-sm cursor-pointer relative"
+                  style={{ zIndex: 3 }}
                 >
                   no
                 </motion.button>
