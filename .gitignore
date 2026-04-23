@@ -9,6 +9,8 @@ dist
 screenshots/
 # raw source dump — gallery pipeline will optimize into public/gallery
 /photos/
+# Claude Code session artifacts
+.claude/
 .env*
 !.env.example
 tsconfig.tsbuildinfo
