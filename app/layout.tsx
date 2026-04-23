@@ -41,6 +41,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     >
       <head>
         <link rel="preconnect" href="https://api.fontshare.com" />
+        <link rel="preconnect" href="https://www.youtube.com" />
+        <link rel="preconnect" href="https://i.ytimg.com" />
+        <link rel="dns-prefetch" href="https://www.youtube-nocookie.com" />
         <link
           href="https://api.fontshare.com/v2/css?f[]=clash-display@700,600,500&display=swap"
           rel="stylesheet"

@@ -99,6 +99,9 @@ html, body { cursor: none; }
 
 .scene { transition: background-color 1000ms cubic-bezier(0.32, 0.72, 0, 1); }
 
+/* Perf: pin layer promotion for 3D-heavy acts so GPU stays warm. */
+.gpu-layer { transform: translateZ(0); will-change: transform; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
