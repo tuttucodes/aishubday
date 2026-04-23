@@ -4,6 +4,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useRef,
   useState,
@@ -26,26 +27,62 @@ export function BackgroundMusicProvider({ children }: { children: ReactNode }) {
   const [currentId, setCurrentId] = useState<string | null>(null);
   const [playing, setPlaying] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
+  const unlockedRef = useRef(false);
 
   const song = useMemo(
     () => SONGS.find((s) => s.youtubeId && s.youtubeId === currentId) ?? null,
     [currentId],
   );
 
-  const play = useCallback((youtubeId: string, start = 0) => {
+  // Prime the <audio> element on the first user interaction anywhere on
+  // the page. iOS Safari only allows later programmatic .play() calls if
+  // the element has been touched by a gesture-initiated play at least once.
+  // We do a silent no-op play+pause on first touchstart/click to unlock.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const prime = () => {
+      if (unlockedRef.current) return;
+      const el = audioRef.current;
+      if (!el) return;
+      unlockedRef.current = true;
+      const prevVol = el.volume;
+      el.volume = 0;
+      el.play()
+        .then(() => {
+          el.pause();
+          el.currentTime = 0;
+          el.volume = prevVol;
+        })
+        .catch(() => {
+          el.volume = prevVol;
+        });
+    };
+    window.addEventListener("touchstart", prime, { once: true, passive: true });
+    window.addEventListener("pointerdown", prime, { once: true, passive: true });
+    return () => {
+      window.removeEventListener("touchstart", prime);
+      window.removeEventListener("pointerdown", prime);
+    };
+  }, []);
+
+  const play = useCallback((youtubeId: string) => {
     const el = audioRef.current;
     if (!el) return;
+    // MUST set src + call play() synchronously in the same gesture stack
+    // for iOS. Skip currentTime seek (iOS throws if called before metadata).
     const nextSrc = `/audio/${youtubeId}.mp3`;
     if (!el.src.endsWith(nextSrc)) {
       el.src = nextSrc;
-      el.currentTime = start;
+      el.load();
     }
     setCurrentId(youtubeId);
     el.volume = 0.85;
     el.loop = true;
-    el.play()
-      .then(() => setPlaying(true))
-      .catch(() => setPlaying(false));
+    el.muted = false;
+    const p = el.play();
+    if (p && typeof p.then === "function") {
+      p.then(() => setPlaying(true)).catch(() => setPlaying(false));
+    }
   }, []);
 
   const pause = useCallback(() => {
@@ -57,9 +94,11 @@ export function BackgroundMusicProvider({ children }: { children: ReactNode }) {
     const el = audioRef.current;
     if (!el || !currentId) return;
     if (el.paused) {
-      el.play()
-        .then(() => setPlaying(true))
-        .catch(() => setPlaying(false));
+      el.muted = false;
+      const p = el.play();
+      if (p && typeof p.then === "function") {
+        p.then(() => setPlaying(true)).catch(() => setPlaying(false));
+      }
     } else {
       el.pause();
       setPlaying(false);
