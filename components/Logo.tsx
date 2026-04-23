@@ -50,7 +50,8 @@ export function LogoBadge() {
       initial={{ opacity: 0, y: -10 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ delay: 0.4, duration: 0.8, ease: [0.32, 0.72, 0, 1] }}
-      className="fixed top-6 left-6 z-[70] cursor-pointer"
+      className="fixed left-4 md:left-6 z-[70] cursor-pointer"
+      style={{ top: "max(1rem, env(safe-area-inset-top))" }}
       aria-label="top · Krishnaa Nair"
     >
       <Logo variant="mark" />

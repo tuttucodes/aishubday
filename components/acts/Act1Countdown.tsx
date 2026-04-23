@@ -126,18 +126,18 @@ export function Act1Countdown() {
               exit={{ opacity: 0, scale: 0.9, filter: "blur(20px)" }}
               transition={{ duration: 1 }}
             >
-              <p className="font-[var(--font-fraunces)] italic text-white/60 text-xl md:text-2xl mb-6">
-                {arrived && MANUAL_LOCK ? "not quite ready. soon." : "counting down to you"}
+              <p className="font-[var(--font-fraunces)] italic text-white/60 text-lg sm:text-xl md:text-2xl mb-6 text-center">
+                counting down to you
               </p>
-              <div className="flex gap-4 md:gap-8 font-[var(--font-geist-mono)]">
+              <div className="flex gap-3 sm:gap-4 md:gap-8 font-[var(--font-geist-mono)]">
                 {[
                   { v: t.h, l: "hrs" },
                   { v: t.m, l: "min" },
                   { v: t.s, l: "sec" },
                 ].map((u) => (
                   <div key={u.l} className="flex flex-col items-center">
-                    <div className="relative w-20 md:w-32 aspect-square rounded-[1.5rem] bg-white/5 hair-dark bezel-inner flex items-center justify-center overflow-hidden">
-                      <span className="font-clash text-4xl md:text-6xl tabular-nums">
+                    <div className="relative w-[min(26vw,8rem)] aspect-square rounded-[1.25rem] md:rounded-[1.5rem] bg-white/5 hair-dark bezel-inner flex items-center justify-center overflow-hidden">
+                      <span className="font-clash text-[clamp(1.75rem,9vw,4rem)] tabular-nums">
                         {String(u.v).padStart(2, "0")}
                       </span>
                       <div
@@ -148,24 +148,15 @@ export function Act1Countdown() {
                         }}
                       />
                     </div>
-                    <span className="mt-3 text-[10px] uppercase tracking-[0.3em] text-white/50">
+                    <span className="mt-3 text-[9px] md:text-[10px] uppercase tracking-[0.3em] text-white/50">
                       {u.l}
                     </span>
                   </div>
                 ))}
               </div>
-              <p className="mt-10 text-sm text-white/40 text-center max-w-md">
-                {arrived && MANUAL_LOCK
-                  ? "the day is here. the rest is being wrapped. one more breath."
-                  : "the page is locked until midnight. the curtain lifts at 00:00."}
+              <p className="mt-8 md:mt-10 text-xs sm:text-sm text-white/40 text-center max-w-sm px-4">
+                five seconds. that's all.
               </p>
-              <div className="mt-3 flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-white/35">
-                <span className="relative flex h-2 w-2">
-                  <span className="absolute inline-flex h-full w-full rounded-full bg-rose/70 animate-ping" />
-                  <span className="relative inline-flex rounded-full h-2 w-2 bg-rose" />
-                </span>
-                door · sealed
-              </div>
             </motion.div>
           ) : (
             <motion.div

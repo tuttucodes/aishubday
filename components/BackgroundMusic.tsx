@@ -76,7 +76,7 @@ export function BackgroundMusicProvider({ children }: { children: ReactNode }) {
       {children}
       <audio
         ref={audioRef}
-        preload="none"
+        preload="metadata"
         onPlay={() => setPlaying(true)}
         onPause={() => setPlaying(false)}
         onEnded={() => {
@@ -109,7 +109,10 @@ function NowPlayingPill() {
           animate={{ y: 0, opacity: 1, filter: "blur(0px)" }}
           exit={{ y: 60, opacity: 0, filter: "blur(10px)" }}
           transition={{ duration: 0.55, ease: [0.32, 0.72, 0, 1] }}
-          className="fixed bottom-4 right-4 md:bottom-6 md:right-6 z-[85]"
+          className="fixed right-4 md:right-6 z-[85]"
+          style={{
+            bottom: "max(1rem, env(safe-area-inset-bottom))",
+          }}
         >
           <div className="flex items-center gap-2 p-1 pl-3 md:pl-4 rounded-full bg-black/70 backdrop-blur-2xl hair-dark shadow-[0_20px_50px_-20px_rgba(0,0,0,0.8)] max-w-[min(88vw,340px)]">
             <span
