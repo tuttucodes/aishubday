@@ -45,8 +45,9 @@ function StarPoint({ s, index, onHover }: { s: Star; index: number; onHover: (i:
       position={s.pos}
       onPointerOver={(e) => { e.stopPropagation(); onHover(index); }}
       onPointerOut={() => onHover(null)}
+      onClick={(e) => { e.stopPropagation(); onHover(index); }}
     >
-      <sphereGeometry args={[0.08, 16, 16]} />
+      <sphereGeometry args={[0.14, 16, 16]} />
       <meshBasicMaterial color="#fff" toneMapped={false} />
     </mesh>
   );

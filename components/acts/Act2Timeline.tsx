@@ -5,46 +5,42 @@ import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { motion } from "motion/react";
-import type { MediaItem, MediaSlug } from "@/lib/media.server";
+import type { GalleryItem } from "@/lib/gallery";
 
 type Frame = {
-  slug: MediaSlug | "bonus";
+  slug: string;
   date: string;
   title: string;
   caption: string;
-  media?: MediaItem;
+  media?: GalleryItem;
 };
 
-const FRAME_META: { slug: MediaSlug; date: string; title: string; caption: string }[] = [
+const FRAME_META: { slug: string; date: string; title: string; caption: string }[] = [
   { slug: "01-day-one", date: "2025 · 06 · 15", title: "day zero", caption: "the first yes. it rained. we ignored it." },
-  { slug: "02-early-nights", date: "2025 · 07", title: "nights", caption: "long calls. longer silences. both lovely." },
+  { slug: "02-early-nights", date: "2025 · 07", title: "nights", caption: "beach terrace. onam. us in the small hours." },
   { slug: "03-dakshinchitra", date: "2025 · 08", title: "dakshinchitra", caption: "the infamous tape. (never speak of it.)" },
   { slug: "04-chikmagalur", date: "2025 · 10", title: "chikmagalur", caption: "those stairs. coffee mist. u in a hoodie." },
-  { slug: "05-year-end", date: "2025 · 12", title: "year end", caption: "u became the weather." },
+  { slug: "05-year-end", date: "2025 · 12", title: "year end", caption: "cherthala. kerala. u became the weather." },
   { slug: "06-valentine", date: "2026 · 02", title: "valentine", caption: "boring date. spectacular company." },
   { slug: "07-us-now", date: "2026 · 03", title: "us, now", caption: "everything louder. everything softer." },
   { slug: "08-today", date: "2026 · 04 · 24", title: "today", caption: "ur day. the whole internet on mute." },
 ];
 
-type Props = {
-  media: Partial<Record<MediaSlug, MediaItem[]>>;
-  bonus?: MediaItem[];
-};
+function pickFeatured(items: GalleryItem[], slug: string): GalleryItem | undefined {
+  const pool = items.filter((i) => i.slug === slug);
+  if (pool.length === 0) return undefined;
+  // prefer an image over a video for hero frame
+  const img = pool.find((i) => i.kind === "image");
+  return img ?? pool[0];
+}
 
-export function Act2Timeline({ media, bonus = [] }: Props) {
+type Props = { items: GalleryItem[] };
+
+export function Act2Timeline({ items }: Props) {
   const FRAMES: Frame[] = FRAME_META.map((f) => ({
     ...f,
-    media: media[f.slug]?.[0],
+    media: pickFeatured(items, f.slug),
   }));
-  bonus.forEach((m, i) => {
-    FRAMES.push({
-      slug: "bonus",
-      date: "bonus",
-      title: `frame ${FRAME_META.length + i + 1}`,
-      caption: "another one.",
-      media: m,
-    });
-  });
 
   const root = useRef<HTMLDivElement>(null);
   const track = useRef<HTMLDivElement>(null);
@@ -137,6 +133,7 @@ function FrameMedia({ frame, index }: { frame: Frame; index: number }) {
     return (
       <video
         src={frame.media.src}
+        poster={frame.media.thumb}
         autoPlay
         muted
         loop
@@ -168,9 +165,9 @@ function PlaceholderFrame({ frame, index }: { frame: Frame; index: number }) {
           {String(index + 1).padStart(2, "0")}
         </span>
         <code className="text-[10px] font-mono text-white/40 bg-black/40 px-3 py-1.5 rounded-full hair-dark">
-          /public/media/{frame.slug}/
+          {frame.slug}
         </code>
-        <p className="text-[10px] uppercase tracking-[0.3em] text-white/30">drop photo or video here</p>
+        <p className="text-[10px] uppercase tracking-[0.3em] text-white/30">no media yet</p>
       </div>
     </div>
   );

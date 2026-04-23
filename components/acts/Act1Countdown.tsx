@@ -126,7 +126,7 @@ export function Act1Countdown() {
               transition={{ duration: 1 }}
             >
               <p className="font-[var(--font-fraunces)] italic text-white/60 text-xl md:text-2xl mb-6">
-                counting down to you
+                {arrived && MANUAL_LOCK ? "not quite ready. soon." : "counting down to you"}
               </p>
               <div className="flex gap-4 md:gap-8 font-[var(--font-geist-mono)]">
                 {[
@@ -154,7 +154,9 @@ export function Act1Countdown() {
                 ))}
               </div>
               <p className="mt-10 text-sm text-white/40 text-center max-w-md">
-                the page is locked until midnight. the curtain lifts at 00:00.
+                {arrived && MANUAL_LOCK
+                  ? "the day is here. the rest is being wrapped. one more breath."
+                  : "the page is locked until midnight. the curtain lifts at 00:00."}
               </p>
               <div className="mt-3 flex items-center gap-2 text-[10px] uppercase tracking-[0.3em] text-white/35">
                 <span className="relative flex h-2 w-2">

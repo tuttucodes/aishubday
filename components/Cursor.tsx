@@ -31,7 +31,7 @@ export function Cursor() {
   }, []);
 
   return (
-    <>
+    <div className="hidden [@media(hover:hover)]:block">
       <div
         ref={dot}
         aria-hidden
@@ -42,6 +42,6 @@ export function Cursor() {
         aria-hidden
         className="fixed top-0 left-0 w-[36px] h-[36px] rounded-full border border-white/40 mix-blend-difference pointer-events-none z-[9999] transition-[width,height] duration-300"
       />
-    </>
+    </div>
   );
 }
