@@ -1,8 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { useScrollLock } from "@/lib/useScrollLock";
+import { useReveal } from "@/components/RevealProvider";
 
 const MEMES: { src: string; caption: string }[] = [
   { src: "/memes/please.gif", caption: "pls?? 🥺" },
@@ -31,6 +32,7 @@ export function Act0Gate() {
   const [noClicks, setNoClicks] = useState(0);
   const [passed, setPassed] = useState(false);
   const [gone, setGone] = useState(false);
+  const { skipAll } = useReveal();
 
   const meme = MEMES[Math.min(noClicks, MEMES.length - 1)];
   const tease = TEASE_COPY[Math.min(noClicks - 1, TEASE_COPY.length - 1)];
@@ -42,6 +44,10 @@ export function Act0Gate() {
     setPassed(true);
     setTimeout(() => setGone(true), 1100);
   };
+
+  useEffect(() => {
+    if (skipAll && !passed) pass();
+  }, [skipAll, passed]);
 
   useScrollLock("act0-gate", !passed && !gone);
 

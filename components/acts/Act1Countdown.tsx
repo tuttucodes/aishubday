@@ -27,7 +27,7 @@ export function Act1Countdown() {
   const [t, setT] = useState<ReturnType<typeof calcDelta> | null>(null);
   const [arrived, setArrived] = useState(false);
   const [bypass, setBypass] = useState(false);
-  const { unlock } = useReveal();
+  const { unlock, skipAll } = useReveal();
 
   useEffect(() => {
     if (typeof window !== "undefined") {
@@ -61,6 +61,10 @@ export function Act1Countdown() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, []);
+
+  useEffect(() => {
+    if (skipAll) setBypass(true);
+  }, [skipAll]);
 
   const unlocked = arrived || bypass;
   useScrollLock("act1-countdown", !unlocked);
