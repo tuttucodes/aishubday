@@ -28,6 +28,10 @@ export function BackgroundMusicProvider({ children }: { children: ReactNode }) {
   const [startAt, setStartAt] = useState<number>(0);
   const [playing, setPlaying] = useState(false);
   const iframeRef = useRef<HTMLIFrameElement>(null);
+  // Tracks whether the user explicitly paused. If false, any "paused" /
+  // "ended" state from YouTube triggers an auto-resume (handles ad breaks,
+  // end-of-track before loop kicks in, brief buffering stalls).
+  const userPausedRef = useRef(false);
 
   const song = useMemo(
     () => SONGS.find((s) => s.youtubeId && s.youtubeId === currentId) ?? null,
@@ -46,6 +50,7 @@ export function BackgroundMusicProvider({ children }: { children: ReactNode }) {
 
   const play = useCallback(
     (youtubeId: string, start = 0) => {
+      userPausedRef.current = false;
       // New track: swap src + rely on autoplay=1. Same track: just resume.
       if (youtubeId !== currentId) {
         setCurrentId(youtubeId);
@@ -59,6 +64,7 @@ export function BackgroundMusicProvider({ children }: { children: ReactNode }) {
   );
 
   const pause = useCallback(() => {
+    userPausedRef.current = true;
     ytCommand("pauseVideo");
     setPlaying(false);
   }, [ytCommand]);
@@ -67,23 +73,40 @@ export function BackgroundMusicProvider({ children }: { children: ReactNode }) {
     if (!currentId) return;
     if (playing) pause();
     else {
+      userPausedRef.current = false;
       ytCommand("playVideo");
       setPlaying(true);
     }
   }, [currentId, playing, pause, ytCommand]);
 
-  // After iframe mounts, YT auto-plays because autoplay=1 is in the URL.
-  // Listen for YT state messages so external controls (mute, ad end, etc)
-  // keep React state synced.
+  // Listen for YT state messages. Auto-resume on any non-user pause /
+  // end so the track stays in background until user explicitly pauses.
   useEffect(() => {
     const onMsg = (e: MessageEvent) => {
       if (e.origin !== "https://www.youtube.com") return;
       try {
         const data = typeof e.data === "string" ? JSON.parse(e.data) : e.data;
         if (data.event === "onStateChange") {
-          // 1=playing, 2=paused, 0=ended
-          if (data.info === 1) setPlaying(true);
-          if (data.info === 2 || data.info === 0) setPlaying(false);
+          // -1=unstarted, 0=ended, 1=playing, 2=paused, 3=buffering, 5=cued
+          const state = data.info as number;
+          if (state === 1) {
+            setPlaying(true);
+            return;
+          }
+          if (state === 0 || state === 2) {
+            // If user didn't pause, kick the player back to play after a
+            // short beat (handles loop gap + ad ends + surprise pauses).
+            if (!userPausedRef.current) {
+              setTimeout(() => {
+                if (!userPausedRef.current) {
+                  ytCommand("seekTo", [0, true]);
+                  ytCommand("playVideo");
+                }
+              }, 150);
+            } else {
+              setPlaying(false);
+            }
+          }
         }
       } catch {
         /* ignore */
@@ -91,7 +114,7 @@ export function BackgroundMusicProvider({ children }: { children: ReactNode }) {
     };
     window.addEventListener("message", onMsg);
     return () => window.removeEventListener("message", onMsg);
-  }, []);
+  }, [ytCommand]);
 
   const value = useMemo<MusicCtx>(
     () => ({ song, playing, play, pause, toggle }),
@@ -158,6 +181,24 @@ function BackgroundMusicIframe({
         allow="autoplay; encrypted-media"
         width={320}
         height={180}
+        onLoad={() => {
+          // Subscribe to onStateChange events so the provider can
+          // auto-resume on end / unexpected pause.
+          const w = iframeRef.current?.contentWindow;
+          if (!w) return;
+          w.postMessage(
+            JSON.stringify({ event: "listening", id: `kn-bg-${id}` }),
+            "https://www.youtube.com",
+          );
+          w.postMessage(
+            JSON.stringify({
+              event: "command",
+              func: "addEventListener",
+              args: ["onStateChange"],
+            }),
+            "https://www.youtube.com",
+          );
+        }}
       />
     </div>
   );
