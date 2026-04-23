@@ -1,6 +1,5 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import { useState } from "react";
 import { motion } from "motion/react";
 import { Canvas } from "@react-three/fiber";

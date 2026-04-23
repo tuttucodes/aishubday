@@ -6,6 +6,12 @@ import * as THREE from "three";
 
 const COUNT = 1200;
 
+// deterministic hash-based pseudo-random so render is pure
+function rnd(seed: number) {
+  const s = Math.sin(seed * 9301 + 49297) * 233280;
+  return s - Math.floor(s);
+}
+
 export function PetalField({ color = "#ffbfd1" }: { color?: string }) {
   const meshRef = useRef<THREE.InstancedMesh>(null);
   const dummy = useMemo(() => new THREE.Object3D(), []);
@@ -14,13 +20,13 @@ export function PetalField({ color = "#ffbfd1" }: { color?: string }) {
     const arr: { x: number; y: number; z: number; vy: number; vr: number; scale: number; phase: number }[] = [];
     for (let i = 0; i < COUNT; i++) {
       arr.push({
-        x: (Math.random() - 0.5) * 30,
-        y: Math.random() * 20,
-        z: (Math.random() - 0.5) * 20,
-        vy: 0.01 + Math.random() * 0.02,
-        vr: (Math.random() - 0.5) * 0.02,
-        scale: 0.04 + Math.random() * 0.08,
-        phase: Math.random() * Math.PI * 2,
+        x: (rnd(i + 1) - 0.5) * 30,
+        y: rnd(i + 2) * 20,
+        z: (rnd(i + 3) - 0.5) * 20,
+        vy: 0.01 + rnd(i + 4) * 0.02,
+        vr: (rnd(i + 5) - 0.5) * 0.02,
+        scale: 0.04 + rnd(i + 6) * 0.08,
+        phase: rnd(i + 7) * Math.PI * 2,
       });
     }
     return arr;
