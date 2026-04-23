@@ -48,7 +48,7 @@ export function Act6Songs() {
               const onToggle = () => {
                 if (!hasId) return;
                 if (isPlayingThis) pause();
-                else play(s.youtubeId!);
+                else play(s.youtubeId!, s.startAt);
               };
 
               return (

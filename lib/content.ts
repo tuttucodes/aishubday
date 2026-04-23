@@ -20,41 +20,44 @@ export type Song = {
   artist: string;
   /** YouTube video id — drives inline + background playback. */
   youtubeId?: string;
+  /** Optional start offset in seconds (skips intro). */
+  startAt?: number;
   /** Fallback external search URL (opens in new tab if no id). */
   search: string;
   note?: string;
 };
 
-// YouTube IDs left null for tracks I cannot verify. Drop in the
-// correct ID anytime and the inline/background player will pick
-// it up automatically.
 export const SONGS: Song[] = [
   {
     title: "Panchasara Umma",
     artist: "Ennum Eppozhum · malayalam",
-    // youtubeId: "REPLACE_ME",
-    search: "https://www.youtube.com/results?search_query=Panchasara+Umma+Ennum+Eppozhum",
+    youtubeId: "uAHYt3nhoBg",
+    startAt: 8,
+    search: "https://www.youtube.com/watch?v=uAHYt3nhoBg",
     note: "slow one. plays when u smile at nothing.",
   },
   {
     title: "Enthanennu Ennodu Onnum",
     artist: "malayalam",
-    // youtubeId: "REPLACE_ME",
-    search: "https://www.youtube.com/results?search_query=Enthanennu+Ennodu+Onnum+Paranjeela",
+    youtubeId: "gR1exIWHFB8",
+    startAt: 8,
+    search: "https://www.youtube.com/watch?v=gR1exIWHFB8",
     note: "our rainy-day song.",
   },
   {
     title: "From the Start",
     artist: "Laufey",
-    youtubeId: "K4IIq2tlJh0",
-    search: "https://www.youtube.com/watch?v=K4IIq2tlJh0",
+    youtubeId: "rHvQakk1zMA",
+    startAt: 6,
+    search: "https://www.youtube.com/watch?v=rHvQakk1zMA",
     note: "u hummed this in the car. i've hummed it since.",
   },
   {
     title: "Les",
     artist: "Childish Gambino",
-    youtubeId: "8X6eMd7XeNo",
-    search: "https://www.youtube.com/watch?v=8X6eMd7XeNo",
+    youtubeId: "L8gGHqPBuZM",
+    startAt: 8,
+    search: "https://www.youtube.com/watch?v=L8gGHqPBuZM",
     note: "late-night us.",
   },
 ];

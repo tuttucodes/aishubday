@@ -14,7 +14,7 @@ import { SONGS, type Song } from "@/lib/content";
 type MusicCtx = {
   song: Song | null;
   playing: boolean;
-  play: (youtubeId: string) => void;
+  play: (youtubeId: string, startAt?: number) => void;
   pause: () => void;
   toggle: () => void;
 };
@@ -23,6 +23,7 @@ const Ctx = createContext<MusicCtx | null>(null);
 
 export function BackgroundMusicProvider({ children }: { children: ReactNode }) {
   const [currentId, setCurrentId] = useState<string | null>(null);
+  const [startAt, setStartAt] = useState<number>(0);
   const [playing, setPlaying] = useState(false);
 
   const song = useMemo(
@@ -30,8 +31,9 @@ export function BackgroundMusicProvider({ children }: { children: ReactNode }) {
     [currentId],
   );
 
-  const play = useCallback((youtubeId: string) => {
+  const play = useCallback((youtubeId: string, start = 0) => {
     setCurrentId(youtubeId);
+    setStartAt(start);
     setPlaying(true);
   }, []);
 
@@ -52,7 +54,7 @@ export function BackgroundMusicProvider({ children }: { children: ReactNode }) {
   return (
     <Ctx.Provider value={value}>
       {children}
-      <BackgroundMusicIframe id={currentId} playing={playing} />
+      <BackgroundMusicIframe id={currentId} playing={playing} startAt={startAt} />
       <NowPlayingPill />
     </Ctx.Provider>
   );
@@ -69,18 +71,21 @@ export function useBackgroundMusic() {
 function BackgroundMusicIframe({
   id,
   playing,
+  startAt,
 }: {
   id: string | null;
   playing: boolean;
+  startAt: number;
 }) {
   if (!id) return null;
   // Unmounting the iframe when paused fully stops audio; remounting on play
   // re-starts. Keying by id+playing forces fresh iframe per state change.
   if (!playing) return null;
-  const src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&controls=0&modestbranding=1&playsinline=1&loop=1&playlist=${id}&rel=0&iv_load_policy=3`;
+  const startParam = startAt > 0 ? `&start=${startAt}` : "";
+  const src = `https://www.youtube-nocookie.com/embed/${id}?autoplay=1&controls=0&modestbranding=1&playsinline=1&loop=1&playlist=${id}&rel=0&iv_load_policy=3${startParam}`;
   return (
     <iframe
-      key={`${id}-${playing}`}
+      key={`${id}-${playing}-${startAt}`}
       src={src}
       title="background music"
       allow="autoplay; encrypted-media"
