@@ -9,6 +9,12 @@ export const HER = {
   togetherLabel: "June 15, 2025",
 };
 
+// Manual paywall switch. Keep true until site is ready to reveal
+// to Krishnaa. When true, countdown stays locked even if the
+// target date has already passed. Flip to false (or delete) when
+// you want the site to open organically / at midnight.
+export const MANUAL_LOCK = true;
+
 export type Song = {
   title: string;
   artist: string;

@@ -7,7 +7,6 @@ import { Act4Letter } from "@/components/acts/Act4Letter";
 import { Act5Reasons } from "@/components/acts/Act5Reasons";
 import { Act6Songs } from "@/components/acts/Act6Songs";
 import { Act7Cake } from "@/components/acts/Act7Cake";
-import { Act8Song } from "@/components/acts/Act8Song";
 import { Act9Gift } from "@/components/acts/Act9Gift";
 import { FinalCard } from "@/components/acts/FinalCard";
 import { SceneNav } from "@/components/SceneNav";
@@ -29,7 +28,6 @@ export default function Home() {
           <section id="act-5"><Act5Reasons /></section>
           <section id="act-6"><Act6Songs /></section>
           <section id="act-7"><Act7Cake /></section>
-          <section id="act-8"><Act8Song /></section>
           <section id="act-9"><Act9Gift /></section>
           <FinalCard />
         </RevealGate>

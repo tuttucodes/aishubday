@@ -7,6 +7,8 @@ dist
 *.log
 .DS_Store
 screenshots/
+# raw source dump — gallery pipeline will optimize into public/gallery
+/photos/
 .env*
 !.env.example
 tsconfig.tsbuildinfo

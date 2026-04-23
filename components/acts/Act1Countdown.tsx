@@ -8,7 +8,7 @@ import { PetalField } from "@/components/three/PetalField";
 import { ClientOnly } from "@/components/ClientOnly";
 import { useScrollLock } from "@/lib/useScrollLock";
 import { useReveal } from "@/components/RevealProvider";
-import { HER } from "@/lib/content";
+import { HER, MANUAL_LOCK } from "@/lib/content";
 
 function calcDelta(target: Date) {
   const now = new Date();
@@ -63,7 +63,9 @@ export function Act1Countdown() {
     return () => window.removeEventListener("keydown", onKey);
   }, []);
 
-  const unlocked = arrived || bypass || skipAll;
+  // Manual lock wins over natural arrival, but bypass (?unlock=1,
+  // Konami u×5, secret code 1212) still works so the owner can preview.
+  const unlocked = MANUAL_LOCK ? bypass || skipAll : arrived || bypass || skipAll;
   useScrollLock("act1-countdown", !unlocked);
 
   useEffect(() => {

@@ -5,6 +5,7 @@ import { LenisProvider } from "@/components/LenisProvider";
 import { Cursor } from "@/components/Cursor";
 import { Konami } from "@/components/Konami";
 import { NameTrail } from "@/components/NameTrail";
+import { LogoBadge } from "@/components/Logo";
 
 const geistSans = Geist({ variable: "--font-geist-sans", subsets: ["latin"] });
 const geistMono = Geist_Mono({ variable: "--font-geist-mono", subsets: ["latin"] });
@@ -17,8 +18,14 @@ const fraunces = Fraunces({
 const caveat = Caveat({ variable: "--font-caveat", subsets: ["latin"], display: "swap" });
 
 export const metadata: Metadata = {
-  title: "for krishnaa — happy birthday",
+  title: "kn · for krishnaa — happy birthday",
   description: "a small internet for chungi. 04.24.2026",
+  icons: {
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/favicon.svg",
+  },
   openGraph: {
     title: "for krishnaa — happy birthday",
     description: "a small internet for chungi.",
@@ -44,6 +51,7 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         <LenisProvider>
           {children}
         </LenisProvider>
+        <LogoBadge />
         <div className="grain" aria-hidden />
         <Cursor />
         <NameTrail />
