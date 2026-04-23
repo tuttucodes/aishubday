@@ -9,6 +9,7 @@ export function Act11Hero({ src }: Props) {
   const root = useRef<HTMLDivElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [playing, setPlaying] = useState(false);
+  const [muted, setMuted] = useState(true);
   const [exists, setExists] = useState<boolean | null>(null);
 
   const { scrollYProgress } = useScroll({ target: root, offset: ["start end", "end start"] });
@@ -51,11 +52,17 @@ export function Act11Hero({ src }: Props) {
     }
   };
 
-  const unmute = () => {
+  const toggleMute = () => {
     const el = videoRef.current;
     if (!el) return;
-    el.muted = false;
-    el.play().catch(() => {});
+    const next = !muted;
+    setMuted(next);
+    el.muted = next;
+    el.volume = 1;
+    if (!next) {
+      // unmute needs a user gesture — play call re-arms audio
+      el.play().then(() => setPlaying(true)).catch(() => {});
+    }
   };
 
   return (
@@ -97,11 +104,12 @@ export function Act11Hero({ src }: Props) {
                 ref={videoRef}
                 src={src}
                 autoPlay
-                muted
+                muted={muted}
                 loop
                 playsInline
                 preload="metadata"
                 onClick={toggle}
+                onVolumeChange={(e) => setMuted((e.currentTarget as HTMLVideoElement).muted)}
                 className="w-full h-full object-cover cursor-pointer"
               />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
@@ -124,10 +132,14 @@ export function Act11Hero({ src }: Props) {
                   {playing ? "pause" : "play"}
                 </button>
                 <button
-                  onClick={unmute}
-                  className="px-4 py-1.5 rounded-full bg-rose/90 text-black text-[10px] uppercase tracking-[0.3em] font-medium hover:bg-rose transition-colors"
+                  onClick={toggleMute}
+                  aria-label={muted ? "unmute" : "mute"}
+                  className="group inline-flex items-center gap-2 pl-4 pr-1 py-1 rounded-full bg-rose/90 text-black text-[10px] uppercase tracking-[0.3em] font-medium hover:bg-rose transition-all duration-300"
                 >
-                  unmute ♪
+                  <span>{muted ? "unmute" : "mute"}</span>
+                  <span className="w-6 h-6 rounded-full bg-black/20 flex items-center justify-center text-xs group-hover:scale-110 transition-transform duration-300">
+                    {muted ? "♪" : "✕"}
+                  </span>
                 </button>
               </div>
             </>
