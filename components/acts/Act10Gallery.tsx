@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 import Image from "next/image";
 import type { GalleryItem } from "@/lib/gallery";
@@ -149,16 +149,8 @@ function Tile({ it, index, onOpen }: { it: GalleryItem; index: number; onOpen: (
         />
       ) : (
         <>
-          <Image
-            src={it.thumb}
-            alt={it.label}
-            width={500}
-            height={500}
-            className="w-full h-auto object-cover"
-            sizes="(max-width: 768px) 50vw, 25vw"
-            loading="lazy"
-          />
-          <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-rose/90 text-black text-[9px] uppercase tracking-[0.25em] font-mono">
+          <AutoVideo src={it.src} poster={it.thumb} alt={it.label} />
+          <div className="absolute top-2 left-2 px-2 py-0.5 rounded-full bg-rose/90 text-black text-[9px] uppercase tracking-[0.25em] font-mono pointer-events-none">
             ● video
           </div>
         </>
@@ -170,6 +162,38 @@ function Tile({ it, index, onOpen }: { it: GalleryItem; index: number; onOpen: (
         </div>
       </div>
     </motion.button>
+  );
+}
+
+function AutoVideo({ src, poster, alt }: { src: string; poster: string; alt: string }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) el.play().catch(() => {});
+          else el.pause();
+        }
+      },
+      { threshold: 0.25 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+  return (
+    <video
+      ref={ref}
+      src={src}
+      poster={poster}
+      muted
+      loop
+      playsInline
+      preload="metadata"
+      aria-label={alt}
+      className="w-full h-auto object-cover block"
+    />
   );
 }
 
@@ -192,11 +216,14 @@ function Lightbox({ it, onClose }: { it: GalleryItem; onClose: () => void }) {
       >
         <div className="relative w-full h-full flex-1 flex items-center justify-center">
           {it.kind === "image" ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img
+            <Image
               src={it.src}
               alt={it.label}
-              className="max-w-full max-h-[75vh] object-contain rounded-xl"
+              width={1600}
+              height={1600}
+              className="max-w-full max-h-[75vh] object-contain rounded-xl w-auto h-auto"
+              sizes="100vw"
+              unoptimized
             />
           ) : (
             <video

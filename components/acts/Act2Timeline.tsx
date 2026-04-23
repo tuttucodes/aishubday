@@ -16,14 +16,14 @@ type Frame = {
 };
 
 const FRAME_META: { slug: string; date: string; title: string; caption: string }[] = [
-  { slug: "01-day-one", date: "2025 · 06 · 15", title: "day zero", caption: "the first yes. it rained. we ignored it." },
-  { slug: "02-early-nights", date: "2025 · 07", title: "nights", caption: "beach terrace. onam. us in the small hours." },
-  { slug: "03-dakshinchitra", date: "2025 · 08", title: "dakshinchitra", caption: "the infamous tape. (never speak of it.)" },
-  { slug: "04-chikmagalur", date: "2025 · 10", title: "chikmagalur", caption: "those stairs. coffee mist. u in a hoodie." },
-  { slug: "05-year-end", date: "2025 · 12", title: "year end", caption: "cherthala. kerala. u became the weather." },
-  { slug: "06-valentine", date: "2026 · 02", title: "valentine", caption: "boring date. spectacular company." },
-  { slug: "07-us-now", date: "2026 · 03", title: "us, now", caption: "everything louder. everything softer." },
-  { slug: "08-today", date: "2026 · 04 · 24", title: "today", caption: "ur day. the whole internet on mute." },
+  { slug: "01-day-one", date: "2025 · 06", title: "udaipur → yes", caption: "iim udaipur week. boat. scooty. somewhere between june 13 and june 15 the pretending ended." },
+  { slug: "02-early-nights", date: "2025 · 07", title: "ecr, july", caption: "the birds. beach terrace mornings. your first illusionist gig. we never really went home." },
+  { slug: "03-dakshinchitra", date: "2025 · 08", title: "august things", caption: "smart mirror nights. owl looks. helmets on the way somewhere — always somewhere." },
+  { slug: "04-chikmagalur", date: "2025 · 09 → 10", title: "onam → chikmagalur", caption: "onam saree. chikmagalur. pool naps. formals by candlelight on halloween." },
+  { slug: "05-year-end", date: "2025 · 11 → 2026 · 01", title: "year end", caption: "go-kart adrenaline. beach terrace cafe — twelve times over in december. rolled into our first new year." },
+  { slug: "06-valentine", date: "2026 · 02", title: "february wore you", caption: "lipstick. jhumka mid-flight. vibrance concert. you under a tree. all february, all yours." },
+  { slug: "07-us-now", date: "2026 · 03", title: "scooty sundays", caption: "march. you were the ceiling i looked up at from the hospital bed, and every sunday since." },
+  { slug: "08-today", date: "2026 · 04 · 24", title: "today", caption: "your day. twenty-one on you. the internet, quiet." },
 ];
 
 function pickFeatured(items: GalleryItem[], slug: string): GalleryItem | undefined {
