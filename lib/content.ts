@@ -18,45 +18,43 @@ export const MANUAL_LOCK = true;
 export type Song = {
   title: string;
   artist: string;
-  /** YouTube video id — if set, inline embed plays on tap. */
+  /** YouTube video id — drives inline + background playback. */
   youtubeId?: string;
-  /** Fallback external YouTube URL. */
-  youtube: string;
-  spotify?: string;
+  /** Fallback external search URL (opens in new tab if no id). */
+  search: string;
   note?: string;
 };
 
+// YouTube IDs left null for tracks I cannot verify. Drop in the
+// correct ID anytime and the inline/background player will pick
+// it up automatically.
 export const SONGS: Song[] = [
   {
     title: "Panchasara Umma",
     artist: "Ennum Eppozhum · malayalam",
-    youtubeId: "gq_DsGIcDds",
-    youtube: "https://www.youtube.com/watch?v=gq_DsGIcDds",
-    spotify: "https://open.spotify.com/search/Panchasara%20Umma",
+    // youtubeId: "REPLACE_ME",
+    search: "https://www.youtube.com/results?search_query=Panchasara+Umma+Ennum+Eppozhum",
     note: "slow one. plays when u smile at nothing.",
   },
   {
     title: "Enthanennu Ennodu Onnum",
     artist: "malayalam",
-    youtubeId: "xS4R5hb41Ys",
-    youtube: "https://www.youtube.com/watch?v=xS4R5hb41Ys",
-    spotify: "https://open.spotify.com/search/Enthanennu%20Ennodu%20Onnum",
+    // youtubeId: "REPLACE_ME",
+    search: "https://www.youtube.com/results?search_query=Enthanennu+Ennodu+Onnum+Paranjeela",
     note: "our rainy-day song.",
   },
   {
     title: "From the Start",
     artist: "Laufey",
     youtubeId: "K4IIq2tlJh0",
-    youtube: "https://www.youtube.com/watch?v=K4IIq2tlJh0",
-    spotify: "https://open.spotify.com/track/5Eax0qFko2dh7Rl2lYs3bx",
+    search: "https://www.youtube.com/watch?v=K4IIq2tlJh0",
     note: "u hummed this in the car. i've hummed it since.",
   },
   {
     title: "Les",
     artist: "Childish Gambino",
     youtubeId: "8X6eMd7XeNo",
-    youtube: "https://www.youtube.com/watch?v=8X6eMd7XeNo",
-    spotify: "https://open.spotify.com/search/Les%20Childish%20Gambino",
+    search: "https://www.youtube.com/watch?v=8X6eMd7XeNo",
     note: "late-night us.",
   },
 ];
