@@ -62,7 +62,7 @@ export function FinalCard() {
         <div className="mt-14 flex items-center justify-center gap-4 text-[10px] uppercase tracking-[0.3em] text-white/30">
           <span>{HER.bdayLabel}</span>
           <span className="w-8 h-px bg-white/20" />
-          <span>forever · tentatively</span>
+          <span>forever · and i mean it</span>
         </div>
 
         <p className="mt-16 text-[10px] font-mono uppercase tracking-[0.3em] text-white/20">
